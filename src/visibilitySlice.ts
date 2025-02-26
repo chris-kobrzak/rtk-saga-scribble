@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const visibilitySlice = createSlice({
+export const visibilitySlice = createSlice({
   name: 'visibility',
   initialState: { visible: true },
   reducers: {

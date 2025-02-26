@@ -1,23 +1,30 @@
-import { configureStore, Middleware } from '@reduxjs/toolkit'
-import createSagaMiddleware from 'redux-saga'
-import visibilityReducer from './visibilitySlice'
-import eventListeners from './eventListeners'
+import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners as setupAsyncListeners } from '@reduxjs/toolkit/query'
 import logger from 'redux-logger'
+import createSagaMiddleware from 'redux-saga'
+
+import asyncEventListener from './asyncEventListener'
+import generatorEventListener from './generatorEventListener'
+import visibilityStateManager from './visibilitySlice'
 
 const sagaMiddleware = createSagaMiddleware()
 
-const middleware: Middleware[] = [sagaMiddleware, logger]
-
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    visibility: visibilityReducer
+    visibility: visibilityStateManager
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ thunk: false }).concat(middleware),
+    getDefaultMiddleware({ thunk: false, serializableCheck: false }).concat(
+      asyncEventListener.middleware,
+      sagaMiddleware,
+      logger
+    ),
   devTools: process.env.NODE_ENV !== 'production'
 })
 
-sagaMiddleware.run(eventListeners)
+sagaMiddleware.run(generatorEventListener)
+
+setupAsyncListeners(store.dispatch)
 
 export type GlobalState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

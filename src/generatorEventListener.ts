@@ -1,5 +1,6 @@
 import { eventChannel } from 'redux-saga'
 import { call } from 'redux-saga/effects'
+
 import { put, take, takeLatest } from './effects'
 import { setVisibility } from './visibilitySlice'
 
@@ -20,6 +21,7 @@ function* watchVisibilityChange(): IterableIterator<unknown> {
   try {
     while (true) {
       const visible = yield take(channel)
+      console.log('Saga Visibility changed to: ', visible)
       yield put(setVisibility(visible))
     }
   } finally {
@@ -27,6 +29,6 @@ function* watchVisibilityChange(): IterableIterator<unknown> {
   }
 }
 
-export default function* eventListeners() {
+export default function* generatorEventListener() {
   yield takeLatest('START_WATCHING_VISIBILITY', watchVisibilityChange)
 }
