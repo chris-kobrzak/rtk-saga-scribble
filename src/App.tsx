@@ -1,5 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import type { GlobalState } from './stateStore'
 
 function App() {

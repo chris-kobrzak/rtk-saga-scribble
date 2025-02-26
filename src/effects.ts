@@ -6,6 +6,7 @@
  * https://github.com/microsoft/TypeScript/pull/47109 for correct narrowing of ReturnType based on
  * Event["type"] input
  */
+
 import {
   put as actualPut,
   putResolve as actualPutResolve,
